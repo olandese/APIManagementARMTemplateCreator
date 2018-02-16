@@ -40,8 +40,7 @@ namespace APIManagementTemplate
         //see filter in https://docs.microsoft.com/en-us/rest/api/apimanagement/api/listbyservice
         [Parameter(
             Mandatory = false,
-            HelpMessage = "Filter for what API's to exort i.e: path eq 'api/v1/currencyconverter' or endswith(path,'currencyconverter')",
-            ValueFromPipeline = true
+            HelpMessage = "Filter for what API's to exort i.e: path eq 'api/v1/currencyconverter' or endswith(path,'currencyconverter')"
         )]
         public string APIFilters = null;
 
@@ -87,6 +86,11 @@ namespace APIManagementTemplate
         )]
         public bool ParametrizePropertiesOnly = false;
 
+        [Parameter(
+            Mandatory = false,
+            HelpMessage = "Piped input from armclient",
+            ValueFromPipeline = true
+        )]
         public string ClaimsDump;
 
         protected override void ProcessRecord()
@@ -97,7 +101,11 @@ namespace APIManagementTemplate
 
                 if (ClaimsDump == null)
                 {
-                    resourceCollector.token = String.IsNullOrEmpty(Token) ? resourceCollector.Login(TenantName) : Token;
+                    if (String.IsNullOrEmpty(Token))
+                    {
+                        Token = resourceCollector.Login(TenantName);
+                        //WriteVerbose(Token);
+                    }
                 }
                 else if (ClaimsDump.Contains("Token copied"))
                 {
