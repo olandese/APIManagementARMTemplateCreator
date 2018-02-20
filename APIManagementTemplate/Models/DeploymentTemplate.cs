@@ -141,6 +141,11 @@ namespace APIManagementTemplate.Models
         public void AddParameterFromObject(JObject obj, string propertyName, string propertyType, string paramNamePrefix = "")
         {
             var propValue = (string)obj[propertyName];
+            if (String.IsNullOrEmpty(propValue))
+            {
+                return;
+            }
+
             if (propValue.StartsWith("[") && propValue.EndsWith("]"))
                 return;
             obj[propertyName] = WrapParameterName(this.AddParameter(paramNamePrefix + "_" + propertyName, propertyType, propValue));
