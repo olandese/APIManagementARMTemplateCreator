@@ -163,9 +163,6 @@ namespace APIManagementTemplate
                 }
             }
 
-
-
-
             return JObject.FromObject(template);
 
         }
@@ -173,7 +170,7 @@ namespace APIManagementTemplate
         public void PolicyHandleProperties(JObject policy, string apiname)
         {
             var policyContent = policy["properties"].Value<string>("policyContent");
-            var match = Regex.Match(policyContent, "{{(?<name>[a-zA-Z0-9]*)}}");
+            var match = Regex.Match(policyContent, "{{(?<name>[a-zA-Z0-9_-]*)}}");
             while (match.Success)
             {
                 string name = match.Groups["name"].Value;
